@@ -32,13 +32,7 @@ app.use((req, res, next) => {
 	next();
 });
 
-app.use('/api/title', titleRoutes);
-app.use('/api/survey', surveyRoutes);
-app.use((req, res, next) => {
-	res.sendFile(path.join(__dirname, 'angular', 'index.html'));
-});
-
-/* app.get('/api/survey/ip', (req, res) => {
+app.get('/api/survey/ip', (req, res) => {
 	const ip = 
 		req.headers['cf-connecting-ip'] ||
 		req.headers['x-real-ip'] ||
@@ -47,7 +41,13 @@ app.use((req, res, next) => {
 	return res.json({
 		ip
 	})
-}); */
+});
+
+app.use('/api/title', titleRoutes);
+app.use('/api/survey', surveyRoutes);
+app.use((req, res, next) => {
+	res.sendFile(path.join(__dirname, 'angular', 'index.html'));
+});
 
 app.listen(port, () => {
 	console.log(`Example app listening at http://localhost:${port}`);

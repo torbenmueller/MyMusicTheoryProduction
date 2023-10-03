@@ -6,8 +6,9 @@ exports.saveSurvey = (req, res, next) => {
 	});
 	
 	console.log(survey);
-	/* const ip = req.clientIp;
-	console.log("IP", ip); */
+	// const ip = req.clientIp;
+	const ip = req.body.ip;
+	console.log("IP", ip);
 	
 	survey.save().then(() => {
 		res.status(201).json({
