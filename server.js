@@ -4,7 +4,6 @@ const mongoose = require('mongoose');
 const path = require('path');
 
 const surveyRoutes = require('./routes/survey');
-const titleRoutes = require('./routes/title');
 
 let port = 3000;
 
@@ -43,8 +42,8 @@ app.get('/api/survey/ip', (req, res) => {
 	})
 });
 
-app.use('/api/title', titleRoutes);
 app.use('/api/survey', surveyRoutes);
+
 app.use((req, res, next) => {
 	res.sendFile(path.join(__dirname, 'angular', 'index.html'));
 });
