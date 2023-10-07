@@ -1,9 +1,9 @@
 const Survey = require('../models/survey');
-const Userip = require('../models/userip');
+const User = require('../models/user');
 
 exports.saveSurvey = async (req, res, next) => {
 	const userIp = req.body.ip;
-	const existingIp = await Userip.findOne({ userip: userIp });
+	const existingIp = await User.findOne({ ip: userIp });
 
 	if (existingIp) return res.status(400).json({ error: 'You have already taken the survey!' });
 
@@ -11,8 +11,8 @@ exports.saveSurvey = async (req, res, next) => {
 		survey: req.body.survey
 	});
 
-	const userip = new Userip({
-		userip: req.body.ip
+	const user = new User({
+		ip: userIp
 	});
 	
 	survey.save().then(() => {
@@ -25,5 +25,58 @@ exports.saveSurvey = async (req, res, next) => {
 		});
 	});
 
-	userip.save();
+	user.save();
 }
+
+exports.getResults = async (req, res, next) => {
+  Survey.aggregate(
+    [
+      {
+        $unwind: "$survey",
+      },
+      {
+        $match: {
+          survey: {
+            $in: [
+				'Notation',
+				'Rhythm and meter',
+				'Scales and key signatures',
+				'Intervals',
+				'Chords',
+				'Chord progressions',
+				'Modulation'
+			],
+          },
+        },
+      },
+      {
+        $group: {
+          _id: "$survey",
+          count: {
+            $sum: 1,
+          },
+        },
+      },
+    ], (err, result) => {
+      if (err) {
+        console.error(err);
+      } else {
+		res.status(200).json({
+			result: result
+		});
+      }
+    }
+  );
+}
+
+exports.getCount = async (req, res, next) => {
+  Survey.countDocuments({}, (err, count) => {
+    if (err) {
+      console.error(err);
+    } else {
+      res.status(200).json({
+        count: count
+      });
+    }
+  });
+};
