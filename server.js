@@ -11,7 +11,7 @@ if (process.env.PORT) {
 	port = process.env.PORT;
 }
 
-mongoose.connect('mongodb+srv://new-user:' + process.env.MONGO_ATLAS_PW + '@cluster0.76fy5.mongodb.net/musicTheoryDB?retryWrites=true&w=majority', { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect('mongodb+srv://new-user:' + process.env.MONGO_ATLAS_PW + '@cluster0.76fy5.mongodb.net/musicTheoryDB?retryWrites=true&w=majority', {})
 	.then(() => {
 		console.log('Connected to database!');
 	})
