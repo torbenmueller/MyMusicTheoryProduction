@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const path = require('path');
 
 const surveyRoutes = require('./routes/survey');
+require('dotenv').config();
 
 let port = 3000;
 
@@ -11,13 +12,16 @@ if (process.env.PORT) {
 	port = process.env.PORT;
 }
 
-mongoose.connect('mongodb+srv://new-user:' + process.env.MONGO_ATLAS_PW + '@cluster0.76fy5.mongodb.net/musicTheoryDB?retryWrites=true&w=majority', {})
-	.then(() => {
+const connectToDatabase = async () => {
+	try {
+		await mongoose.connect("mongodb+srv://new-user:" + process.env.MONGO_ATLAS_PW + "@cluster0.76fy5.mongodb.net/musicTheoryDB?retryWrites=true&w=majority");
 		console.log('Connected to database!');
-	})
-	.catch(() => {
-		console.log('Connection to database failed!');
-	});
+	} catch (err) {
+		console.log('Connection to database failed!', err);
+	}
+}
+
+connectToDatabase();
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
